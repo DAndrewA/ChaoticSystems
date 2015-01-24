@@ -23,14 +23,14 @@ def calcDistance(pos1,pos2):
     distanceV = []
     # Takes the biggest smallest one from the biggest one
     if pos1[0] > pos2[0]:
-        distanceV[0] = pos1[0] - pos2[0]
+        distanceV.append(pos1[0] - pos2[0])
     else:
-        distanceV[0] = pos2[0] - pos1[0]
+        distanceV.append(pos2[0] - pos1[0])
 
     if pos1[1] > pos2[1]:
-        distanceV[1] = pos1[1] - pos2[1]
+        distanceV.append(pos1[1] - pos2[1])
     else:
-        distanceV[1] = pos2[1] - pos1[1]
+        distanceV.append(pos2[1] - pos1[1])
 
     distance = math.sqrt(distanceV[0]**2 + distanceV[1]**2)
     return distance
@@ -52,10 +52,10 @@ def calcCOG(bodies):
     return [COGx,COGy,COGm]
 
 # Calculates the difference in time between the current frame and the previous one (and sets the time for the previous frame as the current time)
-def calcDeltaTime():
-    timeFromLastFrame = time.time() - lastFrame
-    lastFrame = time.time()
-    return timeFromLastFrame
+#def calcDeltaTime():
+#    timeFromLastFrame = time.time() - lastFrame
+#    lastFrame = time.time()
+#    return timeFromLastFrame
 
 # Instantiating the objects and setting their positions and velocities
 body1 = body([430,210],[-50,-30],100)
@@ -67,8 +67,8 @@ c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.
 c.create_oval(body2.position[0]-5,body2.position[1]-5,body2.position[0]+5,body2.position[1]+5,tag="body2Circle",fill="blue")
 c.create_oval(body3.position[0]-5,body3.position[1]-5,body3.position[0]+5,body3.position[1]+5,tag="body3Circle",fill="red")
 
-global lastFrame
-lastFrame = time.time()
+#global lastFrame
+#lastFrame = time.time()
 gravityConstant = 6.67 * math.pow(10,-11)
 
 # Makes the program run forever (or until it is closed)
@@ -76,14 +76,14 @@ while True:
     # Updates the bodies variable with the current objects
     bodies = [body1,body2,body3]
     # Gets the time frame to multiply by and sets the frame values
-    deltaTime = calcDeltaTime()
-    COG = calcGOG(bodies)
+    deltaTime =  1#calcDeltaTime()
+    COG = calcCOG(bodies)
     # Calculates the movements of the first body
     for i in bodies:
         # Using the formula V = t(GMM/d^2M)+U
         # speed = time(gravity * mass1 * mass2/ mass1 * distance^2) + initial speed
-        newVX = deltaTime*(gravityConstant*COG[2])/((calcDistance(i.pos,COG)**2)*i.mass)+i.velocity[0]
-        newVY = deltaTime*(gravityConstant*COG[2])/((calcDistance(i.pos,COG)**2)*i.mass)+i.velocity[1]
+        newVX = deltaTime*(gravityConstant*COG[2])/((calcDistance(i.position,COG)**2)*i.mass)+i.velocity[0]
+        newVY = deltaTime*(gravityConstant*COG[2])/((calcDistance(i.position,COG)**2)*i.mass)+i.velocity[1]
         i.velocity = [newVX,newVY]
     for i in range(len(bodies)):
         # Moves the canvas object and the bodies coordinates
@@ -91,6 +91,7 @@ while True:
         bodies[i].position = [bodies[i].position[0] + newVX/deltaTime,bodies[i].position[1] + newVY/deltaTime]
 
     c.update()
+    time.sleep(2)
 
 
 mainloop()
