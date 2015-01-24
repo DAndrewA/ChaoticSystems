@@ -67,18 +67,28 @@ c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.
 c.create_oval(body2.position[0]-5,body2.position[1]-5,body2.position[0]+5,body2.position[1]+5,tag="body2Circle",fill="blue")
 c.create_oval(body3.position[0]-5,body3.position[1]-5,body3.position[0]+5,body3.position[1]+5,tag="body3Circle",fill="red")
 
-global lastFrame = time.time()
+global lastFrame
+lastFrame = time.time()
+gravityConstant = 6.67 * math.pow(10,-11)
 
 # Makes the program run forever (or until it is closed)
 while True:
-    deltaTime = calcDelatTime()
-    b1NewPos = []
-    b2NewPos = []
-    b3NewPos = []
+    # Updates the bodies variable with the current objects
+    bodies = [body1,body2,body3]
+    # Gets the time frame to multiply by and sets the frame values
+    deltaTime = calcDeltaTime()
+    COG = calcGOG(bodies)
     # Calculates the movements of the first body
-    COG1 = calcGOG([body2,body3])
-    b1Distance = calcDistance(body1.position,COG1)
-        # CALCULATE THE FORCE, THEN INTERPOLATE, THEN REPEAT
+    for i in bodies:
+        # Using the formula V = t(GMM/d^2M)+U
+        # speed = time(gravity * mass1 * mass2/ mass1 * distance^2) + initial speed
+        newVX = deltaTime*(gravityConstant*COG[2])/((calcDistance(i.pos,COG)**2)*i.mass)+i.velocity[0]
+        newVY = deltaTime*(gravityConstant*COG[2])/((calcDistance(i.pos,COG)**2)*i.mass)+i.velocity[1]
+        i.velocity = [newVX,newVY]
+    for i in range(len(bodies)):
+        # Moves the canvas object and the bodies coordinates
+        c.move("body" + str(i) + "Circle",newVX/deltaTime,newVY/deltaTime)
+        bodies[i].position = [bodies[i].position[0] + newVX/deltaTime,bodies[i].position[1] + newVY/deltaTime]
 
     c.update()
 
