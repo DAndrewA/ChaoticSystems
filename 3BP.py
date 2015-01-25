@@ -14,10 +14,6 @@ class body:
         self.velocity = startVelocity
         self.mass = mass
 
-    # Calculates the speed of the body by using its vector and pythagoras' theorum.
-    def calculateSpeed(self):
-        self.speed = math.sqrt(self.velocity[0]**2 + self.velocity[1]**2)
-
 # Calculates the distance between two points. This will be used for getting the distance from a body to the COG.
 def calcDistance(pos1,pos2):
     distanceV = []
@@ -60,7 +56,7 @@ def calcCOG(bodies):
 # Instantiating the objects and setting their positions and velocities
 body1 = body([430,210],[-50,-30],100)
 body2 = body([50,150],[80,40],100)
-body3 = body([300,450],[20,-50],50)
+body3 = body([300,450],[20,-50],100)
 
 # Drawing the bodies onto the canvas
 c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.position[1]+5,tag="body1Circle",fill="green")
@@ -69,14 +65,14 @@ c.create_oval(body3.position[0]-5,body3.position[1]-5,body3.position[0]+5,body3.
 
 #global lastFrame
 #lastFrame = time.time()
-gravityConstant = 6.67 * math.pow(10,-11)
+gravityConstant = 6.67
 
 # Makes the program run forever (or until it is closed)
 while True:
     # Updates the bodies variable with the current objects
     bodies = [body1,body2,body3]
     # Gets the time frame to multiply by and sets the frame values
-    deltaTime =  1#calcDeltaTime()
+    deltaTime =  0.5#calcDeltaTime()
     COG = calcCOG(bodies)
     # Calculates the movements of the first body
     for i in bodies:
@@ -87,7 +83,7 @@ while True:
         i.velocity = [newVX,newVY]
     for i in range(len(bodies)):
         # Moves the canvas object and the bodies coordinates
-        c.move("body" + str(i) + "Circle",newVX/deltaTime,newVY/deltaTime)
+        c.move("body" + str(i + 1) + "Circle",newVX/deltaTime,newVY/deltaTime)
         bodies[i].position = [bodies[i].position[0] + newVX/deltaTime,bodies[i].position[1] + newVY/deltaTime]
 
     c.update()
