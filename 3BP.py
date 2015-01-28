@@ -9,10 +9,11 @@ c.pack()
 # Defines the body object. It will store the position and velocity vector for the body, aswell as its mass and the ability to calculate specific values.
 class body:
     # This is the function that runs when the object is instantiated.
-    def __init__(self,startPosition,startVelocity,mass):
+    def __init__(self,startPosition,startVelocity,mass,id):
         self.position = startPosition
         self.velocity = startVelocity
         self.mass = mass
+        self.id = id
 
 # Calculates the distance between two points. This will be used for getting the distance from a body to the COG.
 def calcDistance(pos1,pos2):
@@ -45,18 +46,13 @@ def calcCOG(bodies):
     # Divides the values by the overall mass to get the weighted average
     COGx = COGx / COGm
     COGy = COGy / COGm
+    # Returns: x,y,mass
     return [COGx,COGy,COGm]
 
-# Calculates the difference in time between the current frame and the previous one (and sets the time for the previous frame as the current time)
-#def calcDeltaTime():
-#    timeFromLastFrame = time.time() - lastFrame
-#    lastFrame = time.time()
-#    return timeFromLastFrame
-
 # Instantiating the objects and setting their positions and velocities
-body1 = body([430,210],[-50,-30],100)
-body2 = body([50,150],[80,40],100)
-body3 = body([300,450],[20,-50],100)
+body1 = body([430,210],[-50,-30],100,0)
+body2 = body([50,150],[80,40],100,1)
+body3 = body([300,450],[20,-50],100,2)
 
 # Drawing the bodies onto the canvas
 c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.position[1]+5,tag="body1Circle",fill="green")
@@ -65,29 +61,48 @@ c.create_oval(body3.position[0]-5,body3.position[1]-5,body3.position[0]+5,body3.
 
 #global lastFrame
 #lastFrame = time.time()
-gravityConstant = 6.67
+gravityConstant = 6.67*(10**-11)
 
 # Makes the program run forever (or until it is closed)
 while True:
     # Updates the bodies variable with the current objects
     bodies = [body1,body2,body3]
     # Gets the time frame to multiply by and sets the frame values
-    deltaTime =  0.5#calcDeltaTime()
+    deltaTime =  0.0007
     COG = calcCOG(bodies)
-    # Calculates the movements of the first body
+    # Goes through all bodies
     for i in bodies:
-        # Using the formula V = t(GMM/d^2M)+U
-        # speed = time(gravity * mass1 * mass2/ mass1 * distance^2) + initial speed
-        newVX = deltaTime*(gravityConstant*COG[2])/((calcDistance(i.position,COG)**2)*i.mass)+i.velocity[0]
-        newVY = deltaTime*(gravityConstant*COG[2])/((calcDistance(i.position,COG)**2)*i.mass)+i.velocity[1]
-        i.velocity = [newVX,newVY]
+        # Calculates the accelaration for all of the bodies before moving them
+        for x in bodies:
+            if i.id != x.id:
+                COG = calcCOG([i,x])
+                # Force = G * ((M1*M2)/distance^2)
+                F = gravityConstant*((i.mass*x.mass)/(calcDistance(COG,i.position)**2))
+                # Break down force into x and y components
+                        # THE INTERNET IS A REALLY USEFULL THING
+                # Calculate angle theta with equation in equation sheet
+                deltaX = COG[0] - i.position[0]
+                deltaY = COG[1] - i.position[1]
+                thetaRad = math.atan2(deltaX,deltaY)
+                # Using trig.
+                Fx = math.cos(thetaRad)*F
+                Fy = math.sin(thetaRad)*F
+                # Calculating x and y accelaration
+                Ax = Fx/i.mass
+                Ay = Fy/i.mass
+                # Calculate final velocity vector by using v=u+at
+                i.velocity[0] += Ax*deltaTime
+                i.velocity[1] += Ay*deltaTime
+
+    # Moving all of the bodies after calculations
     for i in range(len(bodies)):
         # Moves the canvas object and the bodies coordinates
-        c.move("body" + str(i + 1) + "Circle",newVX/deltaTime,newVY/deltaTime)
-        bodies[i].position = [bodies[i].position[0] + newVX/deltaTime,bodies[i].position[1] + newVY/deltaTime]
+        c.move("body" + str(i + 1) + "Circle",bodies[i].velocity[0]*deltaTime,bodies[i].velocity[1]*deltaTime)
+        bodies[i].position = [bodies[i].position[0] + bodies[i].velocity[0]*deltaTime,
+                                        bodies[i].position[1] + bodies[i].velocity[1]*deltaTime]
 
     c.update()
-    time.sleep(2)
+    #time.sleep(2)
 
 
 mainloop()
