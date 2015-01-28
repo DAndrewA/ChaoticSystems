@@ -68,7 +68,7 @@ while True:
     # Updates the bodies variable with the current objects
     bodies = [body1,body2,body3]
     # Gets the time frame to multiply by and sets the frame values
-    deltaTime =  0.0007
+    deltaTime =  0.0002
     COG = calcCOG(bodies)
     # Goes through all bodies
     for i in bodies:
