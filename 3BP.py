@@ -33,16 +33,24 @@ def calcDistance(pos1,pos2):
     return distance
 
 # Instantiating the objects and setting their positions and velocities
-body1 = body([350,150],[-10,-30],200,0)
-body2 = body([150,250],[30,10],100,1)
-body3 = body([350,350],[-20,40],200,2)
-body4 = body([500,350],[0,0],2000,3)
+body1 = body([100,100],[10,30],200,0)
+body2 = body([250,100],[30,10],100,1)
+body3 = body([400,100],[-20,40],200,2)
+body4 = body([650,100],[20,-20],300,3)
+body5 = body([100,250],[0,0],470,4)
+body6 = body([100,400],[-45,20],140,5)
+body7 = body([100,650],[-30,10],200,6)
+body8 = body([600,600],[-20,0],2000,7)
 
 # Drawing the bodies onto the canvas
-c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.position[1]+5,tag="body1Circle",fill="#FFFF00")
+c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.position[1]+5,tag="body1Circle",fill="#FF0000")
 c.create_oval(body2.position[0]-5,body2.position[1]-5,body2.position[0]+5,body2.position[1]+5,tag="body2Circle",fill="#0000FF")
 c.create_oval(body3.position[0]-5,body3.position[1]-5,body3.position[0]+5,body3.position[1]+5,tag="body3Circle",fill="#00FF00")
-c.create_oval(body4.position[0]-5,body4.position[1]-5,body4.position[0]+5,body4.position[1]+5,tag="body4Circle",fill="#FF0000")
+c.create_oval(body4.position[0]-5,body4.position[1]-5,body4.position[0]+5,body4.position[1]+5,tag="body4Circle",fill="#FF00FF")
+c.create_oval(body5.position[0]-5,body5.position[1]-5,body5.position[0]+5,body5.position[1]+5,tag="body5Circle",fill="#FFFF00")
+c.create_oval(body6.position[0]-5,body6.position[1]-5,body6.position[0]+5,body6.position[1]+5,tag="body6Circle",fill="#00FFFF")
+c.create_oval(body7.position[0]-5,body7.position[1]-5,body7.position[0]+5,body7.position[1]+5,tag="body7Circle",fill="#FFFFFF")
+c.create_oval(body8.position[0]-5,body8.position[1]-5,body8.position[0]+5,body8.position[1]+5,tag="body8Circle",fill="#000000")
 
 #global lastFrame
 #lastFrame = time.time()
@@ -51,7 +59,7 @@ gravityConstant = 500
 # Makes the program run forever (or until it is closed)
 while True:
     # Updates the bodies variable with the current objects
-    bodies = [body1,body2,body3,body4]
+    bodies = [body1,body2,body3,body4,body5,body6,body7,body8]
     # Gets the time frame to multiply by and sets the frame values
     deltaTime =  0.0005
     # Goes through all bodies
