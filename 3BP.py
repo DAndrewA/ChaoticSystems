@@ -39,7 +39,7 @@ body3 = body([350,350],[-20,40],200,2)
 body4 = body([500,350],[0,0],2000,3)
 
 # Drawing the bodies onto the canvas
-c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.position[1]+5,tag="body1Circle",fill="#FF00FF")
+c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.position[1]+5,tag="body1Circle",fill="#FFFF00")
 c.create_oval(body2.position[0]-5,body2.position[1]-5,body2.position[0]+5,body2.position[1]+5,tag="body2Circle",fill="#0000FF")
 c.create_oval(body3.position[0]-5,body3.position[1]-5,body3.position[0]+5,body3.position[1]+5,tag="body3Circle",fill="#00FF00")
 c.create_oval(body4.position[0]-5,body4.position[1]-5,body4.position[0]+5,body4.position[1]+5,tag="body4Circle",fill="#FF0000")
