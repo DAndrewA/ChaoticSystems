@@ -50,9 +50,9 @@ def calcCOG(bodies):
     return [COGx,COGy,COGm]
 
 # Instantiating the objects and setting their positions and velocities
-body1 = body([430,210],[-50,-30],100,0)
-body2 = body([50,150],[80,40],100,1)
-body3 = body([300,450],[20,-50],100,2)
+body1 = body([350,150],[0,0],100,0)
+body2 = body([150,250],[30,10],100,1)
+body3 = body([350,350],[-20,-10],100,2)
 
 # Drawing the bodies onto the canvas
 c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.position[1]+5,tag="body1Circle",fill="green")
@@ -68,7 +68,7 @@ while True:
     # Updates the bodies variable with the current objects
     bodies = [body1,body2,body3]
     # Gets the time frame to multiply by and sets the frame values
-    deltaTime =  0.0002
+    deltaTime =  0.0005
     # Goes through all bodies
     for i in bodies:
         # Calculates the accelaration for all of the bodies before moving them
@@ -84,8 +84,8 @@ while True:
                 deltaY = COG[1] - i.position[1]
                 thetaRad = math.atan2(deltaX,deltaY)
                 # Using trig.
-                Fx = math.cos(thetaRad)*F
-                Fy = math.sin(thetaRad)*F
+                Fx = math.sin(thetaRad)*F
+                Fy = math.cos(thetaRad)*F
                 # Calculating x and y accelaration
                 Ax = Fx/i.mass
                 Ay = Fy/i.mass
