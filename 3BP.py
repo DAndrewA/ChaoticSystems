@@ -61,7 +61,7 @@ c.create_oval(body3.position[0]-5,body3.position[1]-5,body3.position[0]+5,body3.
 
 #global lastFrame
 #lastFrame = time.time()
-gravityConstant = 6.67*(10**-11)
+gravityConstant = 500
 
 # Makes the program run forever (or until it is closed)
 while True:
@@ -69,7 +69,6 @@ while True:
     bodies = [body1,body2,body3]
     # Gets the time frame to multiply by and sets the frame values
     deltaTime =  0.0002
-    COG = calcCOG(bodies)
     # Goes through all bodies
     for i in bodies:
         # Calculates the accelaration for all of the bodies before moving them
