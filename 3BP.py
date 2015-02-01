@@ -3,7 +3,7 @@ import math
 import time
 
 app = Tk()
-c = Canvas(app,height="750",width="750")
+c = Canvas(app,height="700",width="700")
 c.pack()
 
 # Defines the body object. It will store the position and velocity vector for the body, aswell as its mass and the ability to calculate specific values.
@@ -85,7 +85,12 @@ while True:
                 # Calculate final velocity vector by using v=u+at
                 i.velocity[0] += Ax*deltaTime
                 i.velocity[1] += Ay*deltaTime
-
+        '''
+        if i.position[0] < 0 or i.position[0] > 700:
+            i.velocity[0] *= -1
+        if i.position[1] < 0 or i.position[1] >700:
+            i.velocity[1] *= -1
+        '''
     # Moving all of the bodies after calculations
     for i in range(len(bodies)):
         # Moves the canvas object and the bodies coordinates
