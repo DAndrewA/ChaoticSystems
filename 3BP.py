@@ -2,8 +2,80 @@ from tkinter import *
 import math
 import time
 
-app = Tk()
-c = Canvas(app,height="700",width="700")
+global running
+running = False
+global bodies
+bodies = []
+gravityConstant = 500
+
+# SIMULATION EDITOR
+selector = Tk()
+selector.title("Simulation editor")
+selector.geometry("300x475")
+selectorApp = Frame(selector)
+selectorApp.grid()
+
+# Functions for the simulation editor
+def createBody():
+    bodies.append(body([scaleXAxis.get(),scaleYAxis.get()],[scaleXVelocity.get(),scaleYVelocity.get()],int(entryMass.get()),len(bodies)))
+    c.create_oval(bodies[len(bodies)-1].position[0]-5,
+                          bodies[len(bodies)-1].position[1]-5,
+                          bodies[len(bodies)-1].position[0]+5,
+                          bodies[len(bodies)-1].position[1]+5,
+                          tag="body"+str(bodies[len(bodies)-1].id)+"Circle",
+                          fill=entryColour.get())
+    c.update()
+
+def removeBody():
+    if len(bodies) > 0:
+        c.delete(tag="body"+bodies[bodies[len]-1].id+"Circle")
+        bodies.remove(bodies[len(bodies)-1])
+        c.update()
+
+def toggleSim():
+    if running:
+        running = False
+    else:
+        running = True
+
+# Defining the widgits for the app and their functions
+labelIntroduction = Label(selector,text="Remove/add bodies. Start or stop the simulation.")
+labelIntroduction.grid()
+
+# All the sliders for the position of the next body and for the time frame
+scaleTimeSlider = Scale(selector,orient="horizontal",from_="-5",to="5",resolution=0.5,length="300",label="Time scale")
+scaleTimeSlider.grid()
+scaleXAxis = Scale(selector,orient="horizontal",from_="0",to="700",resolution="10",length="300",label="Position X")
+scaleXAxis.grid()
+scaleYAxis = Scale(selector,orient="horizontal",from_="0",to="700",resolution="10",length="300",label="Position Y")
+scaleYAxis.grid()
+scaleXVelocity = Scale(selector,orient="horizontal",from_="-50",to="50",resolution="1",length="300",label="Speed X")
+scaleXVelocity.grid()
+scaleYVelocity = Scale(selector,orient="horizontal",from_="-50",to="50",resolution="1",length="300",label="Speed Y")
+scaleYVelocity.grid()
+
+#Widgets for selecting the mass of the next body and colour
+labelMass = Label(selector,text="Mass")
+labelMass.grid()
+entryMass = Entry(selector,width="4")
+entryMass.grid()
+labelColour = Label(selector,text="Colour")
+labelColour.grid()
+entryColour = Entry(selector,width="10")
+entryColour.grid()
+buttonAddNewBody = Button(selector,text="Add body",command=createBody)
+buttonAddNewBody.grid()
+buttonRemoveLastBody = Button(selector,text="Remove last body",command=removeBody)
+buttonRemoveLastBody.grid()
+
+#Widget for toggling the simulation. Should default to off
+buttonToggleSim = Button(selector,text="Toggle simulation",command=toggleSim)
+buttonToggleSim.grid()
+
+# SIMULATION
+canvasApp = Tk()
+canvasApp.title("N-Body Problem")
+c = Canvas(canvasApp,height="700",width="700")
 c.pack()
 
 # Defines the body object. It will store the position and velocity vector for the body, aswell as its mass and the ability to calculate specific values.
@@ -32,36 +104,11 @@ def calcDistance(pos1,pos2):
     distance = math.sqrt(distanceV[0]**2 + distanceV[1]**2)
     return distance
 
-# Instantiating the objects and setting their positions and velocities
-body1 = body([100,100],[10,30],200,0)
-body2 = body([250,100],[30,10],100,1)
-body3 = body([400,100],[-20,40],200,2)
-body4 = body([650,100],[20,-20],300,3)
-body5 = body([100,250],[0,0],470,4)
-body6 = body([100,400],[-45,20],140,5)
-body7 = body([100,650],[-30,10],200,6)
-body8 = body([600,600],[-20,0],2000,7)
-
-# Drawing the bodies onto the canvas
-c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.position[1]+5,tag="body1Circle",fill="#FF0000")
-c.create_oval(body2.position[0]-5,body2.position[1]-5,body2.position[0]+5,body2.position[1]+5,tag="body2Circle",fill="#0000FF")
-c.create_oval(body3.position[0]-5,body3.position[1]-5,body3.position[0]+5,body3.position[1]+5,tag="body3Circle",fill="#00FF00")
-c.create_oval(body4.position[0]-5,body4.position[1]-5,body4.position[0]+5,body4.position[1]+5,tag="body4Circle",fill="#FF00FF")
-c.create_oval(body5.position[0]-5,body5.position[1]-5,body5.position[0]+5,body5.position[1]+5,tag="body5Circle",fill="#FFFF00")
-c.create_oval(body6.position[0]-5,body6.position[1]-5,body6.position[0]+5,body6.position[1]+5,tag="body6Circle",fill="#00FFFF")
-c.create_oval(body7.position[0]-5,body7.position[1]-5,body7.position[0]+5,body7.position[1]+5,tag="body7Circle",fill="#FFFFFF")
-c.create_oval(body8.position[0]-5,body8.position[1]-5,body8.position[0]+5,body8.position[1]+5,tag="body8Circle",fill="#000000")
-
-#global lastFrame
-#lastFrame = time.time()
-gravityConstant = 500
-
 # Makes the program run forever (or until it is closed)
-while True:
-    # Updates the bodies variable with the current objects
-    bodies = [body1,body2,body3,body4,body5,body6,body7,body8]
+
+while running:
     # Gets the time frame to multiply by and sets the frame values
-    deltaTime =  0.0005
+    deltaTime =  scaleTimeSlider.get()*0.0005
     # Goes through all bodies
     for i in bodies:
         # Calculates the accelaration for all of the bodies before moving them
@@ -94,10 +141,9 @@ while True:
     # Moving all of the bodies after calculations
     for i in range(len(bodies)):
         # Moves the canvas object and the bodies coordinates
-        c.move("body" + str(i + 1) + "Circle",bodies[i].velocity[0]*deltaTime,bodies[i].velocity[1]*deltaTime)
+        c.move("body" + str(i.id) + "Circle",bodies[i].velocity[0]*deltaTime,bodies[i].velocity[1]*deltaTime)
         bodies[i].position = [bodies[i].position[0] + bodies[i].velocity[0]*deltaTime,
                                         bodies[i].position[1] + bodies[i].velocity[1]*deltaTime]
-
     c.update()
     #time.sleep(2)
 
