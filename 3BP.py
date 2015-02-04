@@ -28,15 +28,20 @@ def createBody():
 
 def removeBody():
     if len(bodies) > 0:
-        c.delete(tag="body"+bodies[bodies[len]-1].id+"Circle")
+        c.delete("body"+bodies[bodies[len]-1].id+"Circle")
         bodies.remove(bodies[len(bodies)-1])
         c.update()
 
 def toggleSim():
-    if running:
-        running = False
-    else:
+    try:
+        if running == True:
+            running = False
+        else:
+            running = True
+            runSimulation()
+    except:
         running = True
+        runSimulation()
 
 # Defining the widgits for the app and their functions
 labelIntroduction = Label(selector,text="Remove/add bodies. Start or stop the simulation.")
@@ -106,46 +111,47 @@ def calcDistance(pos1,pos2):
 
 # Makes the program run forever (or until it is closed)
 
-while running:
-    # Gets the time frame to multiply by and sets the frame values
-    deltaTime =  scaleTimeSlider.get()*0.0005
-    # Goes through all bodies
-    for i in bodies:
-        # Calculates the accelaration for all of the bodies before moving them
-        for x in bodies:
-            if i.id != x.id:
-                COG = x.position
-                # Force = G * ((M1*M2)/distance^2)
-                F = gravityConstant*((i.mass*x.mass)/(calcDistance(COG,i.position)**2))
-                # Break down force into x and y components
-                        # THE INTERNET IS A REALLY USEFULL THING
-                # Calculate angle theta with equation in equation sheet
-                deltaX = COG[0] - i.position[0]
-                deltaY = COG[1] - i.position[1]
-                thetaRad = math.atan2(deltaX,deltaY)
-                # Using trig.
-                Fx = math.sin(thetaRad)*F
-                Fy = math.cos(thetaRad)*F
-                # Calculating x and y accelaration
-                Ax = Fx/i.mass
-                Ay = Fy/i.mass
-                # Calculate final velocity vector by using v=u+at
-                i.velocity[0] += Ax*deltaTime
-                i.velocity[1] += Ay*deltaTime
-        '''
-        if i.position[0] < 0 or i.position[0] > 700:
-            i.velocity[0] *= -1
-        if i.position[1] < 0 or i.position[1] >700:
-            i.velocity[1] *= -1
-        '''
-    # Moving all of the bodies after calculations
-    for i in range(len(bodies)):
-        # Moves the canvas object and the bodies coordinates
-        c.move("body" + str(i.id) + "Circle",bodies[i].velocity[0]*deltaTime,bodies[i].velocity[1]*deltaTime)
-        bodies[i].position = [bodies[i].position[0] + bodies[i].velocity[0]*deltaTime,
-                                        bodies[i].position[1] + bodies[i].velocity[1]*deltaTime]
-    c.update()
-    #time.sleep(2)
+def runSimulation():
+    while running:
+        # Gets the time frame to multiply by and sets the frame values
+        deltaTime =  float(scaleTimeSlider.get())*0.0005
+        # Goes through all bodies
+        for i in bodies:
+            # Calculates the accelaration for all of the bodies before moving them
+            for x in bodies:
+                if i.id != x.id:
+                    COG = x.position
+                    # Force = G * ((M1*M2)/distance^2)
+                    F = gravityConstant*((i.mass*x.mass)/(calcDistance(COG,i.position)**2))
+                    # Break down force into x and y components
+                            # THE INTERNET IS A REALLY USEFULL THING
+                    # Calculate angle theta with equation in equation sheet
+                    deltaX = COG[0] - i.position[0]
+                    deltaY = COG[1] - i.position[1]
+                    thetaRad = math.atan2(deltaX,deltaY)
+                    # Using trig.
+                    Fx = math.sin(thetaRad)*F
+                    Fy = math.cos(thetaRad)*F
+                    # Calculating x and y accelaration
+                    Ax = Fx/i.mass
+                    Ay = Fy/i.mass
+                    # Calculate final velocity vector by using v=u+at
+                    i.velocity[0] += Ax*deltaTime
+                    i.velocity[1] += Ay*deltaTime
+            '''
+            if i.position[0] < 0 or i.position[0] > 700:
+                i.velocity[0] *= -1
+            if i.position[1] < 0 or i.position[1] >700:
+                i.velocity[1] *= -1
+            '''
+        # Moving all of the bodies after calculations
+        for i in range(len(bodies)):
+            # Moves the canvas object and the bodies coordinates
+            c.move("body" + str(i.id) + "Circle",bodies[i].velocity[0]*deltaTime,bodies[i].velocity[1]*deltaTime)
+            bodies[i].position = [bodies[i].position[0] + bodies[i].velocity[0]*deltaTime,
+                                            bodies[i].position[1] + bodies[i].velocity[1]*deltaTime]
+        c.update()
+        #time.sleep(2)
 
 
 mainloop()
