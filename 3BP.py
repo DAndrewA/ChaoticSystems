@@ -21,6 +21,13 @@ class body:
         self.radius =  (volume/((4/3)*math.pi))**(1/3)
         c.create_oval(self.position[0]-self.radius,self.position[1]-self.radius,self.position[0]+self.radius,self.position[1]+self.radius,tag="body"+str(self.id)+"Circle",fill=colour)
 
+    def updateMovement(self,deltaTime):
+        # Moves the canvas object and the bodies coordinates
+        c.move("body" + str(self.id) + "Circle",self.velocity[0]*deltaTime,self.velocity[1]*deltaTime)
+        bodies[i].position = [self.position[0] + self.velocity[0]*deltaTime,
+                                        self.position[1] + self.velocity[1]*deltaTime]
+
+
 # Calculates the distance between two points. This will be used for getting the distance from a body to the COG.
 def calcDistance(pos1,pos2):
     distanceV = []
@@ -99,11 +106,7 @@ while True:
         '''
     # Moving all of the bodies after calculations
     for i in range(len(bodies)):
-        # Moves the canvas object and the bodies coordinates
-        c.move("body" + str(bodies[i].id) + "Circle",bodies[i].velocity[0]*deltaTime,bodies[i].velocity[1]*deltaTime)
-        bodies[i].position = [bodies[i].position[0] + bodies[i].velocity[0]*deltaTime,
-                                        bodies[i].position[1] + bodies[i].velocity[1]*deltaTime]
-
+        bodies[i].updateMovement(deltaTime)
     c.update()
     #time.sleep(2)
 
