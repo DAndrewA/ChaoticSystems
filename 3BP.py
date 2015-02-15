@@ -15,6 +15,7 @@ class body:
         self.velocity = startVelocity
         self.mass = mass
         self.id = id
+        self.status = 1
 
     def drawBody(self,colour):
         volume = density*self.mass
@@ -27,6 +28,19 @@ class body:
         bodies[i].position = [self.position[0] + self.velocity[0]*deltaTime,
                                         self.position[1] + self.velocity[1]*deltaTime]
 
+    def checkCollision(self,other):
+        if self.mass < other.mass:
+            return
+        else:
+            distance = calcDistance(self.position,other.position)-(self.radius)
+            if distance > other.radius:
+                self.velocity[0] = (self.velocity[0]*self.mass)+(other.velocity[0]*other.mass)/(self.mass+other.mass)
+                self.velocity[1] = (self.velocity[1]*self.mass)+(other.velocity[1]*other.mass)/(self.mass+other.mass)
+                self. mass += other.mass
+                other.mass = 0
+                other.velocity = [0,0]
+                other.position = [-200,-200]
+                other.status = 0
 
 # Calculates the distance between two points. This will be used for getting the distance from a body to the COG.
 def calcDistance(pos1,pos2):
@@ -79,7 +93,7 @@ while True:
     for i in bodies:
         # Calculates the accelaration for all of the bodies before moving them
         for x in bodies:
-            if i.id != x.id:
+            if i.id != x.id and i.status == 1:
                 COG = x.position
                 # Force = G * ((M1*M2)/distance^2)
                 F = gravityConstant*((i.mass*x.mass)/(calcDistance(COG,i.position)**2))
@@ -98,6 +112,10 @@ while True:
                 # Calculate final velocity vector by using v=u+at
                 i.velocity[0] += Ax*deltaTime
                 i.velocity[1] += Ay*deltaTime
+
+                #Checking for collision witht the other body
+                #i.checkCollision(x)
+
         '''
         if i.position[0] < 0 or i.position[0] > 700:
             i.velocity[0] *= -1
