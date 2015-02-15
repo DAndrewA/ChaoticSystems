@@ -29,17 +29,17 @@ class body:
                                         self.position[1] + self.velocity[1]*deltaTime]
 
     def checkCollision(self,other):
-        if self.mass < other.mass:
+        if self.mass > other.mass:
             return
         else:
             distance = calcDistance(self.position,other.position)-(self.radius)
-            if distance > other.radius:
+            if distance - other.radius < 0:
                 self.velocity[0] = (self.velocity[0]*self.mass)+(other.velocity[0]*other.mass)/(self.mass+other.mass)
                 self.velocity[1] = (self.velocity[1]*self.mass)+(other.velocity[1]*other.mass)/(self.mass+other.mass)
                 self. mass += other.mass
                 other.mass = 0
                 other.velocity = [0,0]
-                other.position = [-200,-200]
+                other.position = [other.id*(-200),-200]
                 other.status = 0
 
 # Calculates the distance between two points. This will be used for getting the distance from a body to the COG.
@@ -114,7 +114,7 @@ while True:
                 i.velocity[1] += Ay*deltaTime
 
                 #Checking for collision witht the other body
-                #i.checkCollision(x)
+                i.checkCollision(x)
 
         '''
         if i.position[0] < 0 or i.position[0] > 700:
