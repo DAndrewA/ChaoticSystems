@@ -7,6 +7,7 @@ c = Canvas(app,height="700",width="700")
 c.pack()
 
 # Defines the body object. It will store the position and velocity vector for the body, aswell as its mass and the ability to calculate specific values.
+density = 2.5
 class body:
     # This is the function that runs when the object is instantiated.
     def __init__(self,startPosition,startVelocity,mass,id):
@@ -14,6 +15,11 @@ class body:
         self.velocity = startVelocity
         self.mass = mass
         self.id = id
+
+    def drawBody(self,colour):
+        volume = density*self.mass
+        self.radius =  (volume/((4/3)*math.pi))**(1/3)
+        c.create_oval(self.position[0]-self.radius,self.position[1]-self.radius,self.position[0]+self.radius,self.position[1]+self.radius,tag="body"+str(self.id)+"Circle",fill=colour)
 
 # Calculates the distance between two points. This will be used for getting the distance from a body to the COG.
 def calcDistance(pos1,pos2):
@@ -43,14 +49,14 @@ body7 = body([100,650],[-30,10],200,6)
 body8 = body([600,600],[-20,0],2000,7)
 
 # Drawing the bodies onto the canvas
-c.create_oval(body1.position[0]-5,body1.position[1]-5,body1.position[0]+5,body1.position[1]+5,tag="body1Circle",fill="#FF0000")
-c.create_oval(body2.position[0]-5,body2.position[1]-5,body2.position[0]+5,body2.position[1]+5,tag="body2Circle",fill="#0000FF")
-c.create_oval(body3.position[0]-5,body3.position[1]-5,body3.position[0]+5,body3.position[1]+5,tag="body3Circle",fill="#00FF00")
-c.create_oval(body4.position[0]-5,body4.position[1]-5,body4.position[0]+5,body4.position[1]+5,tag="body4Circle",fill="#FF00FF")
-c.create_oval(body5.position[0]-5,body5.position[1]-5,body5.position[0]+5,body5.position[1]+5,tag="body5Circle",fill="#FFFF00")
-c.create_oval(body6.position[0]-5,body6.position[1]-5,body6.position[0]+5,body6.position[1]+5,tag="body6Circle",fill="#00FFFF")
-c.create_oval(body7.position[0]-5,body7.position[1]-5,body7.position[0]+5,body7.position[1]+5,tag="body7Circle",fill="#FFFFFF")
-c.create_oval(body8.position[0]-5,body8.position[1]-5,body8.position[0]+5,body8.position[1]+5,tag="body8Circle",fill="#000000")
+body1.drawBody("#FF0000")
+body2.drawBody("#0000FF")
+body3.drawBody("#00FF00")
+body4.drawBody("#FF00FF")
+body5.drawBody("#FFFF00")
+body6.drawBody("#00FFFF")
+body7.drawBody("#FFFFFF")
+body8.drawBody("black")
 
 #global lastFrame
 #lastFrame = time.time()
@@ -94,7 +100,7 @@ while True:
     # Moving all of the bodies after calculations
     for i in range(len(bodies)):
         # Moves the canvas object and the bodies coordinates
-        c.move("body" + str(i + 1) + "Circle",bodies[i].velocity[0]*deltaTime,bodies[i].velocity[1]*deltaTime)
+        c.move("body" + str(bodies[i].id) + "Circle",bodies[i].velocity[0]*deltaTime,bodies[i].velocity[1]*deltaTime)
         bodies[i].position = [bodies[i].position[0] + bodies[i].velocity[0]*deltaTime,
                                         bodies[i].position[1] + bodies[i].velocity[1]*deltaTime]
 
