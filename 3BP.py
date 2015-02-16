@@ -3,6 +3,7 @@ import math
 import time
 
 app = Tk()
+app.title("n-body problem")
 c = Canvas(app,height="700",width="700")
 c.pack()
 
@@ -63,25 +64,27 @@ def calcDistance(pos1,pos2):
     return distance
 
 # Instantiating the objects and setting their positions and velocities
-body1 = body([350,100],[20,0],250,0)
-body2 = body([350,350],[20,-30],500,1)
+body1 = body([350,100],[20,0],200,0)
+body2 = body([350,350],[0,0],500,1)
 body3 = body([350,600],[-20,0],200,2)
+'''
 body4 = body([650,100],[20,-20],300,3)
 body5 = body([100,250],[0,0],470,4)
 body6 = body([100,400],[-45,20],140,5)
 body7 = body([100,650],[-30,10],200,6)
 body8 = body([600,600],[-20,0],1000,7)
-
+'''
 # Drawing the bodies onto the canvas
 body1.drawBody("#FF0000")
 body2.drawBody("#0000FF")
 body3.drawBody("#00FF00")
+'''
 body4.drawBody("#FF00FF")
 body5.drawBody("#FFFF00")
 body6.drawBody("#00FFFF")
 body7.drawBody("#FFFFFF")
 body8.drawBody("black")
-
+'''
 #global lastFrame
 #lastFrame = time.time()
 gravityConstant = 500
@@ -89,7 +92,7 @@ gravityConstant = 500
 # Makes the program run forever (or until it is closed)
 while True:
     # Updates the bodies variable with the current objects
-    bodies = [body1,body2,body3,body4,body5,body6,body7,body8]
+    bodies = [body1,body2,body3]#,body4,body5,body6,body7,body8]
     # Gets the time frame to multiply by and sets the frame values
     deltaTime =  0.0005
     # Goes through all bodies
