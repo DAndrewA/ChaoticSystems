@@ -21,10 +21,12 @@ class body:
         volume = density*self.mass
         self.radius =  (volume/((4/3)*math.pi))**(1/3)
         c.create_oval(self.position[0]-self.radius,self.position[1]-self.radius,self.position[0]+self.radius,self.position[1]+self.radius,tag="body"+str(self.id)+"Circle",fill=colour)
+        c.create_line(self.position[0],self.position[1],self.position[0]+self.velocity[0],self.position[1]+self.velocity[1],fill="blue",tag="body" + str(self.id) + "Arrow",arrow="last")
 
     def updateMovement(self,deltaTime):
         # Moves the canvas object and the bodies coordinates
         c.move("body" + str(self.id) + "Circle",self.velocity[0]*deltaTime,self.velocity[1]*deltaTime)
+        c.coords("body" + str(self.id) + "Arrow",self.position[0],self.position[1],self.position[0]+self.velocity[0],self.position[1]+self.velocity[1])
         bodies[i].position = [self.position[0] + self.velocity[0]*deltaTime,
                                         self.position[1] + self.velocity[1]*deltaTime]
 
@@ -36,10 +38,11 @@ class body:
             if distance - other.radius < 0:
                 self.velocity[0] = (self.velocity[0]*self.mass)+(other.velocity[0]*other.mass)/(self.mass+other.mass)
                 self.velocity[1] = (self.velocity[1]*self.mass)+(other.velocity[1]*other.mass)/(self.mass+other.mass)
-                self. mass += other.mass
+                self. mass += self.mass
+
                 other.mass = 0
                 other.velocity = [0,0]
-                other.position = [other.id*(-200),-200]
+                #other.position = [other.id*(-200),-200]
                 other.status = 0
 
 # Calculates the distance between two points. This will be used for getting the distance from a body to the COG.
@@ -60,14 +63,14 @@ def calcDistance(pos1,pos2):
     return distance
 
 # Instantiating the objects and setting their positions and velocities
-body1 = body([100,100],[10,30],200,0)
-body2 = body([250,100],[30,10],100,1)
-body3 = body([400,100],[-20,40],200,2)
+body1 = body([350,100],[20,0],250,0)
+body2 = body([350,350],[20,-30],500,1)
+body3 = body([350,600],[-20,0],200,2)
 body4 = body([650,100],[20,-20],300,3)
 body5 = body([100,250],[0,0],470,4)
 body6 = body([100,400],[-45,20],140,5)
 body7 = body([100,650],[-30,10],200,6)
-body8 = body([600,600],[-20,0],2000,7)
+body8 = body([600,600],[-20,0],1000,7)
 
 # Drawing the bodies onto the canvas
 body1.drawBody("#FF0000")
@@ -114,7 +117,7 @@ while True:
                 i.velocity[1] += Ay*deltaTime
 
                 #Checking for collision witht the other body
-                i.checkCollision(x)
+                #i.checkCollision(x)
 
         '''
         if i.position[0] < 0 or i.position[0] > 700:
