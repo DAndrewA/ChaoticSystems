@@ -11,12 +11,13 @@ c.pack()
 density = 2.5
 class body:
     # This is the function that runs when the object is instantiated.
-    def __init__(self,startPosition,startVelocity,mass,id):
+    def __init__(self,startPosition,startVelocity,mass,id,colour):
         self.position = startPosition
         self.velocity = startVelocity
         self.mass = mass
         self.id = id
         self.status = 1
+        self.drawBody(colour)
 
     def drawBody(self,colour):
         volume = density*self.mass
@@ -64,27 +65,15 @@ def calcDistance(pos1,pos2):
     return distance
 
 # Instantiating the objects and setting their positions and velocities
-body1 = body([350,100],[20,0],200,0)
-body2 = body([350,350],[0,0],500,1)
-body3 = body([350,600],[-20,0],200,2)
-'''
-body4 = body([650,100],[20,-20],300,3)
-body5 = body([100,250],[0,0],470,4)
-body6 = body([100,400],[-45,20],140,5)
-body7 = body([100,650],[-30,10],200,6)
-body8 = body([600,600],[-20,0],1000,7)
-'''
-# Drawing the bodies onto the canvas
-body1.drawBody("#FF0000")
-body2.drawBody("#0000FF")
-body3.drawBody("#00FF00")
-'''
-body4.drawBody("#FF00FF")
-body5.drawBody("#FFFF00")
-body6.drawBody("#00FFFF")
-body7.drawBody("#FFFFFF")
-body8.drawBody("black")
-'''
+body1 = body([350,100],[20,0],200,0,"#FF0000")
+body2 = body([350,350],[0,0],500,1,"#0000FF")
+body3 = body([350,600],[-20,0],200,2,"#00FF00")
+body4 = body([650,100],[20,-20],300,3,"#FF00FF")
+body5 = body([100,250],[0,0],470,4,"#FFFF00")
+body6 = body([100,400],[-45,20],140,5,"#00FFFF")
+body7 = body([100,650],[-30,10],200,6,"#FFFFFF")
+body8 = body([600,600],[-20,0],1000,7,"black")
+
 #global lastFrame
 #lastFrame = time.time()
 gravityConstant = 500
@@ -92,7 +81,7 @@ gravityConstant = 500
 # Makes the program run forever (or until it is closed)
 while True:
     # Updates the bodies variable with the current objects
-    bodies = [body1,body2,body3]#,body4,body5,body6,body7,body8]
+    bodies = [body1,body2,body3,body4,body5,body6,body7,body8]
     # Gets the time frame to multiply by and sets the frame values
     deltaTime =  0.0005
     # Goes through all bodies
