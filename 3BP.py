@@ -65,15 +65,17 @@ def calcDistance(pos1,pos2):
     return distance
 
 # Instantiating the objects and setting their positions and velocities
-body1 = body([350,100],[20,0],200,0,"#FF0000")
-body2 = body([350,350],[0,0],500,1,"#0000FF")
-body3 = body([350,600],[-20,0],200,2,"#00FF00")
-body4 = body([650,100],[20,-20],300,3,"#FF00FF")
-body5 = body([100,250],[0,0],470,4,"#FFFF00")
-body6 = body([100,400],[-45,20],140,5,"#00FFFF")
-body7 = body([100,650],[-30,10],200,6,"#FFFFFF")
-body8 = body([600,600],[-20,0],1000,7,"black")
-
+# body([position],[velocity],mass,id,colour)
+body1 = body([350,350],[0,0],2000,0,"#FF0000")
+body2 = body([350,120],[60,0],300,1,"#0000FF")
+body3 = body([350,580],[-60,0],300,2,"#00FF00")
+body4 = body([350,90],[0,20],50,3,"#FF00FF")
+body5 = body([350,610],[0,-20],50,4,"#FFFF00")
+'''
+body6 = body([500,400],[-30,-5],3000,5,"#00FFFF")
+body7 = body([300,550],[20,15],5000,6,"#FFFFFF")
+body8 = body([70,650],[-20,5],3000,7,"black")
+'''
 #global lastFrame
 #lastFrame = time.time()
 gravityConstant = 500
@@ -81,7 +83,7 @@ gravityConstant = 500
 # Makes the program run forever (or until it is closed)
 while True:
     # Updates the bodies variable with the current objects
-    bodies = [body1,body2,body3,body4,body5,body6,body7,body8]
+    bodies = [body1,body2,body3,body4,body5]#,body6,body7,body8]
     # Gets the time frame to multiply by and sets the frame values
     deltaTime =  0.0005
     # Goes through all bodies
