@@ -21,6 +21,10 @@ class body:
 
     def drawBody(self,colour):
         volume = density*self.mass
+        # allowing for negative masses
+        if volume < 0:
+            volume *= -1
+
         self.radius =  (volume/((4/3)*math.pi))**(1/3)
         c.create_oval(self.position[0]-self.radius,self.position[1]-self.radius,self.position[0]+self.radius,self.position[1]+self.radius,tag="body"+str(self.id)+"Circle",fill=colour)
         c.create_line(self.position[0],self.position[1],self.position[0]+self.velocity[0],self.position[1]+self.velocity[1],fill="blue",tag="body" + str(self.id) + "Arrow",arrow="last")
@@ -32,6 +36,7 @@ class body:
         bodies[i].position = [self.position[0] + self.velocity[0]*deltaTime,
                                         self.position[1] + self.velocity[1]*deltaTime]
 
+    # never actually used as a function
     def checkCollision(self,other):
         if self.mass > other.mass:
             return
@@ -66,13 +71,13 @@ def calcDistance(pos1,pos2):
 
 # Instantiating the objects and setting their positions and velocities
 # body([position],[velocity],mass,id,colour)
-body1 = body([350,350],[0,0],2000,0,"#FF0000")
-body2 = body([350,120],[60,0],300,1,"#0000FF")
-body3 = body([350,580],[-60,0],300,2,"#00FF00")
-body4 = body([350,90],[0,20],50,3,"#FF00FF")
-body5 = body([350,610],[0,-20],50,4,"#FFFF00")
+body1 = body([350,350],[0,0],-50,0,"#FF0000")
+body2 = body([344.2285,360],[0,0],-50,1,"#0000FF")
+body3 = body([355.7735,360],[0,0],-50,2,"#00FF00")
+body4 = body([350,100],[0,0],1300,3,"#FF00FF")
+body5 = body([105.6625,600],[0,0],1300,4,"#FFFF00")
+body6 = body([594.3375,600],[0,0],1300,5,"#00FFFF")
 '''
-body6 = body([500,400],[-30,-5],3000,5,"#00FFFF")
 body7 = body([300,550],[20,15],5000,6,"#FFFFFF")
 body8 = body([70,650],[-20,5],3000,7,"black")
 '''
@@ -83,7 +88,7 @@ gravityConstant = 500
 # Makes the program run forever (or until it is closed)
 while True:
     # Updates the bodies variable with the current objects
-    bodies = [body1,body2,body3,body4,body5]#,body6,body7,body8]
+    bodies = [body1,body2,body3,body4,body5,body6]#,body7,body8]
     # Gets the time frame to multiply by and sets the frame values
     deltaTime =  0.0005
     # Goes through all bodies
