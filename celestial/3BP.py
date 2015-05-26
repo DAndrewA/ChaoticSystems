@@ -33,7 +33,7 @@ class body:
         # Moves the canvas object and the bodies coordinates
         c.move("body" + str(self.id) + "Circle",self.velocity[0]*deltaTime,self.velocity[1]*deltaTime)
         c.coords("body" + str(self.id) + "Arrow",self.position[0],self.position[1],self.position[0]+self.velocity[0],self.position[1]+self.velocity[1])
-        bodies[i].position = [self.position[0] + self.velocity[0]*deltaTime,
+        self.position = [self.position[0] + self.velocity[0]*deltaTime,
                                         self.position[1] + self.velocity[1]*deltaTime]
 
     # never actually used as a function
@@ -71,13 +71,13 @@ def calcDistance(pos1,pos2):
 
 # Instantiating the objects and setting their positions and velocities
 # body([position],[velocity],mass,id,colour)
-body1 = body([350,350],[0,0],-50,0,"#FF0000")
-body2 = body([344.2285,360],[0,0],-50,1,"#0000FF")
-body3 = body([355.7735,360],[0,0],-50,2,"#00FF00")
-body4 = body([350,100],[0,0],1300,3,"#FF00FF")
-body5 = body([105.6625,600],[0,0],1300,4,"#FFFF00")
-body6 = body([594.3375,600],[0,0],1300,5,"#00FFFF")
+body1 = body([350,350],[0,0],150,0,"#FF0000")
+body2 = body([150,350],[10,20],250,1,"#0000FF")
+body3 = body([550,350],[-10,-20],250,2,"#00FF00")
+body4 = body([350,150],[-30,0],150,3,"#FF00FF")
+body5 = body([350,550],[30,0],150,4,"#FFFF00")
 '''
+body6 = body([594.3375,600],[0,0],1300,5,"#00FFFF")
 body7 = body([300,550],[20,15],5000,6,"#FFFFFF")
 body8 = body([70,650],[-20,5],3000,7,"black")
 '''
@@ -88,7 +88,7 @@ gravityConstant = 500
 # Makes the program run forever (or until it is closed)
 while True:
     # Updates the bodies variable with the current objects
-    bodies = [body1,body2,body3,body4,body5,body6]#,body7,body8]
+    bodies = [body1,body2,body3,body4,body5]#,body6,body7,body8]
     # Gets the time frame to multiply by and sets the frame values
     deltaTime =  0.0005
     # Goes through all bodies

@@ -61,8 +61,13 @@ particles.append(particle([500,400],[0,0],-1,10))
 particles.append(particle([600,300],[0,0],1,11))
 particles.append(particle([600,400],[0,0],-1,12))
 
-# m akes the program run forever, or until it is closed
+# makes the program run forever, or until it is closed
 while True:
+    deltaTime = 0.0005
+
+    for i in particles:
+        for x in particles:
+            if i.id != x.id:
 
 
 
