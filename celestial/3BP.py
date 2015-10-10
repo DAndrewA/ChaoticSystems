@@ -34,7 +34,7 @@ class body:
         c.move("body" + str(self.id) + "Circle",self.velocity[0]*deltaTime,self.velocity[1]*deltaTime)
         c.coords("body" + str(self.id) + "Arrow",self.position[0],self.position[1],self.position[0]+self.velocity[0],self.position[1]+self.velocity[1])
         self.position = [self.position[0] + self.velocity[0]*deltaTime,
-                                        self.position[1] + self.velocity[1]*deltaTime]
+                         self.position[1] + self.velocity[1]*deltaTime]
 
     # never actually used as a function
     def checkCollision(self,other):
