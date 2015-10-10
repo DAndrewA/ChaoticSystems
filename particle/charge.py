@@ -20,10 +20,10 @@ class particle():
         self.mass = mass
 
     def drawParticle(self,charge):
-        if charge == -1:
+        if charge < 0:
             colour = "#FF0000"
         elif charge == 0:
-            colour = "#AA00AA"
+            colour = "#00FF00"
         else:
             colour = "#0000FF"
 
@@ -61,27 +61,34 @@ def destroy(i,x):
     c.delete("body" + str(particles[i].id) + "Arrow")
     c.delete("body" + str(particles[x].id) + "Arrow")
 
-    # creating the new rectangle and removing the objects from the particles array
+    # creating the new particle, then removing old ones
+    newParticle = particle(particles[i].position,
+                  [(particles[i].velocity[0]*particles[i].mass + particles[x].velocity[0]*particles[x].mass)/(particles[i].mass + particles[x].mass),
+                   (particles[i].velocity[1]*particles[i].mass + particles[x].velocity[1]*particles[x].mass)/(particles[i].mass + particles[x].mass)],
+                  particles[i].mass + particles[x].mass,
+                  particles[i].charge + particles[x].charge,
+                  len(particles)-2)
+
     # x MUST be destroyed first otherwise the indexes of the elements all change
-    c.create_rectangle(particles[i].position[0]-particles[i].radius,particles[i].position[1]-particles[i].radius,particles[i].position[0]+particles[i].radius,particles[i].position[1]+particles[i].radius,fill="green")
     particles.pop(x)
     particles.pop(i)
+    particles.append(newParticle)
 
 
 # creating a bunch of particles
 particles = []
-particles.append(particle([120,220],[5,10],1,1,0))
-particles.append(particle([140,250],[-10,0],1,1,1))
-particles.append(particle([440,270],[0,0],1,-1,2))
-particles.append(particle([200,400],[0,0],1,-1,3))
-particles.append(particle([340,400],[0,0],1,1,4))
-particles.append(particle([230,580],[0,0],1,-1,5))
-particles.append(particle([500,650],[0,0],1,1,6))
-particles.append(particle([500,640],[0,0],1,1,7))
-particles.append(particle([560,490],[0,0],1,-1,8))
-#particles.append(particle([560,490],[0,0],1,1,9))
-#particles.append(particle([600,300],[0,0],1,1,10))
-#particles.append(particle([600,400],[0,0],1,-1,11))
+particles.append(particle([50,320],[0,0],1,1,0))
+particles.append(particle([150,320],[0,0],1,-2,1))
+particles.append(particle([250,520],[0,0],1,-1,2))
+particles.append(particle([350,320],[0,0],1,-1,3))
+particles.append(particle([450,320],[0,0],2,1,4))
+particles.append(particle([550,320],[0,0],1,-2,5))
+particles.append(particle([50,380],[0,0],1,1,6))
+particles.append(particle([150,380],[0,0],1,4,7))
+particles.append(particle([250,370],[0,0],1,-1,8))
+particles.append(particle([350,380],[0,0],1,1,9))
+particles.append(particle([450,380],[0,0],1,-1,10))
+particles.append(particle([550,380],[0,0],1,-1,11))
 
 kConstant = 1000
 
@@ -94,10 +101,13 @@ while True:
     for indexI,i in enumerate(particles):
         for indexX,x in enumerate(particles):
             if i.id != x.id:
-                if calcDistance(i.position,x.position) < i.radius + x.radius and x.charge * i.charge == -1:
+                if calcDistance(i.position,x.position) < i.radius + x.radius and x.charge * i.charge < 0:
                     destroy(indexI,indexX)
 
-                F = (kConstant*i.charge*x.charge)/(calcDistance(i.position,x.position)**2)
+                distance = calcDistance(i.position,x.position)
+                if distance == 0:
+                    distance += 0.001
+                F = 0-(kConstant*i.charge*x.charge)/(distance**2)
 
                 # calculating the direction of the force and therefore the force vector
                 deltaX = x.position[0] - i.position[0]
