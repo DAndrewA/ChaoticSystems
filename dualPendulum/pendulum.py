@@ -47,7 +47,7 @@ class Pendulum:
 
         c.create_oval(350+ self.position[0]-self.width,350+ self.position[1]-self.width,350+ self.position[0]+self.width,350+ self.position[1]+self.width,fill="blue",tag="p")
 
-p = Pendulum(10,200,math.pi/2,0)
+p = Pendulum(10,250,math.pi/2,0)
 
 # Where the code runs. Calculates the forces acting upon the pendulum, then applies them
 while True:
